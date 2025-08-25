@@ -7,7 +7,20 @@ const DATA = [
   {
     level: "A1",
     topics: [
-      { name: "Daily routines", tests: [ { title: "Morning routine", audio: "audio/a1_daily.mp3", image: "images/sample.jpg", bigPrompt: "Listen and complete.", fields: [] } ] },
+      { name: "Daily routines", tests: [ {
+  title: "Mini Test 1 - Daily Routines",
+  audio: "audio/a1_daily_1.mp3",   // your audio file path
+  image: "images/sample.jpg",       // optional clue image
+  bigPrompt: "Listen to the audio and complete the 5 blanks below.",
+  fields: [
+    { label: "Wake up time", key: "q1", answers: ["7 am","seven"] },
+    { label: "Breakfast food", key: "q2", answers: ["bread","toast"] },
+    { label: "Leaves home at", key: "q3", answers: ["8 am","eight"] },
+    { label: "Goes to school by", key: "q4", answers: ["bus","by bus"] },
+    { label: "First lesson", key: "q5", answers: ["english"] }
+  ]
+}
+ ] },
       { name: "Family & friends", tests: [ { title: "Talking about family", audio: "audio/a1_family.mp3", image: "", bigPrompt: "Listen and fill in the blanks.", fields: [] } ] },
       { name: "Food & drinks", tests: [] },
       { name: "Numbers & time", tests: [] },
@@ -153,3 +166,4 @@ function backButton(fn) {
 
 // Start
 showLevels();
+
