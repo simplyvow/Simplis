@@ -1,94 +1,120 @@
 // ==========================
-//  Listening Website Skeleton
+//  Listening Website (v2) – grouped tests + auto filenames
 // ==========================
 
-// Data structure: levels -> topics -> tests
-const DATA = [
-  {
-    level: "A1",
-    topics: [
-      { name: "Daily routines", tests: [ {
-  title: "Mini Test 1 - Daily Routines",
-  audio: "audio/a1_daily_1.mp3",   // your audio file path
-  image: "images/sample.jpg",       // optional clue image
-  bigPrompt: "Listen to the audio and complete the 5 blanks below.",
-  fields: [
-    { label: "Wake up time", key: "q1", answers: ["7 am","seven"] },
-    { label: "Breakfast food", key: "q2", answers: ["bread","toast"] },
-    { label: "Leaves home at", key: "q3", answers: ["8 am","eight"] },
-    { label: "Goes to school by", key: "q4", answers: ["bus","by bus"] },
-    { label: "First lesson", key: "q5", answers: ["english"] }
+// Topic lists per level
+const TOPICS = {
+  A1: [
+    "Daily routines", "Family & friends", "Food & drinks", "Numbers & time",
+    "School", "Weather & seasons", "Hobbies & free time",
+    "Shopping", "Travel", "At the Park"
+  ],
+  A2: [
+    "Holidays & festivals", "Health", "Sports",
+    "Houses & homes", "Work & jobs", "DirectionS", "Nature",
+    "Weekend plans", "Fashion", "Ordering"
+  ],
+  B1: [
+    "Technology", "cClture", "Education",
+    "Travel", "Environment", "Communication",
+    "Entertainment", "Future plans", "City & countryside",
+    "Volunteering & charity"
+  ],
+  B2: [
+    "Global problems", "Science & innovations", "Fitness trends",
+    "News & current affairs", "Cultural diversity", "Professional life",
+    "Urban life", "Technology & privacy", "Space exploration",
+    "The future of work"
   ]
+};
+
+// Turn text like "Family & friends" into "family_friends"
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
- ] },
-      { name: "Family & friends", tests: [ { title: "Talking about family", audio: "audio/a1_family.mp3", image: "", bigPrompt: "Listen and fill in the blanks.", fields: [] } ] },
-      { name: "Food & drinks", tests: [] },
-      { name: "Numbers & time", tests: [] },
-      { name: "School & classroom", tests: [] },
-      { name: "Weather & seasons", tests: [] },
-      { name: "Hobbies & free time", tests: [] },
-      { name: "Shopping & prices", tests: [] },
-      { name: "Travel basics", tests: [] },
-      { name: "At the park", tests: [] }
-    ]
-  },
-  {
-    level: "A2",
-    topics: [
-      { name: "Holidays & festivals", tests: [] },
-      { name: "Health & body", tests: [] },
-      { name: "Sports & activities", tests: [] },
-      { name: "House & home", tests: [] },
-      { name: "Work & jobs", tests: [] },
-      { name: "Directions & town", tests: [] },
-      { name: "Animals & nature", tests: [] },
-      { name: "Weekend plans", tests: [] },
-      { name: "Clothes & fashion", tests: [] },
-      { name: "Restaurant & ordering", tests: [] }
-    ]
-  },
-  {
-    level: "B1",
-    topics: [
-      { name: "Technology in daily life", tests: [] },
-      { name: "Music & culture", tests: [] },
-      { name: "Education & studying abroad", tests: [] },
-      { name: "Travel experiences", tests: [] },
-      { name: "Environmental issues", tests: [] },
-      { name: "Social media & communication", tests: [] },
-      { name: "Art & entertainment", tests: [] },
-      { name: "Future plans & ambitions", tests: [] },
-      { name: "City vs countryside", tests: [] },
-      { name: "Volunteering & charity", tests: [] }
-    ]
-  },
-  {
-    level: "B2",
-    topics: [
-      { name: "Global problems", tests: [] },
-      { name: "Science & innovation", tests: [] },
-      { name: "Health & fitness trends", tests: [] },
-      { name: "News & current affairs", tests: [] },
-      { name: "Cultural diversity", tests: [] },
-      { name: "Careers & professional life", tests: [] },
-      { name: "Transport & urban life", tests: [] },
-      { name: "Technology & privacy", tests: [] },
-      { name: "Space exploration", tests: [] },
-      { name: "The future of work", tests: [] }
-    ]
+
+function audioPath(level, topicName, type, index) {
+  return `audio/${level}/${slugify(topicName)}/${type}_${index}.mp3`;
+}
+
+function imagePath(level, topicName, type, index) {
+  return `images/${level}/${slugify(topicName)}/${type}_${index}.jpg`;
+}
+
+function makeTest({ level, topicName, type, index, questions, titlePrefix }) {
+  const test = {
+    level,
+    topic: topicName,
+    type,            // 'mini' | 'short' | 'full'
+    index,           // 1..N within its type
+    title: `${titlePrefix} ${index}`,
+    audio: audioPath(level, topicName, type, index),
+    image: imagePath(level, topicName, type, index),
+    bigPrompt: "Listen and answer the questions.",
+    fields: Array.from({ length: questions }, (_, j) => ({
+      label: `Question ${j + 1}`,
+      key: `q${j + 1}`,
+      answers: [] // fill later if you want auto-checking
+    }))
+  };
+
+  // Example: keep your original sample for A1 → Daily routines → Mini Test 1
+  if (level === "A1" && topicName === "Daily routines" && type === "mini" && index === 1) {
+    test.title = "Mini Test 1 - Daily Routines";
+    test.bigPrompt = "Listen to the audio and complete the 5 blanks below.";
+    test.audio = audioPath(level, topicName, type, index); // you can rename your file to match this path
+    test.image = imagePath(level, topicName, type, index);
+    test.fields = [
+      { label: "Wake up time", key: "q1", answers: ["7 am", "seven"] },
+      { label: "Breakfast food", key: "q2", answers: ["bread", "toast"] },
+      { label: "Leaves home at", key: "q3", answers: ["8 am", "eight"] },
+      { label: "Goes to school by", key: "q4", answers: ["bus", "by bus"] },
+      { label: "First lesson", key: "q5", answers: ["english"] }
+    ];
   }
-];
+
+  return test;
+}
+
+function generateTests(level, topicName) {
+  const tests = [];
+  if (level === "A1" || level === "A2") {
+    for (let i = 1; i <= 10; i++) tests.push(makeTest({ level, topicName, type: "mini", index: i, questions: 5, titlePrefix: "Mini Test" }));
+    for (let i = 1; i <= 10; i++) tests.push(makeTest({ level, topicName, type: "short", index: i, questions: 10, titlePrefix: "Short Test" }));
+  } else { // B1/B2
+    for (let i = 1; i <= 15; i++) tests.push(makeTest({ level, topicName, type: "short", index: i, questions: 10, titlePrefix: "Short Test" }));
+    for (let i = 1; i <= 10; i++) tests.push(makeTest({ level, topicName, type: "full", index: i, questions: 20, titlePrefix: "Full Test" }));
+  }
+  return tests;
+}
+
+// Build DATA programmatically
+const DATA = Object.entries(TOPICS).map(([level, topicNames]) => ({
+  level,
+  topics: topicNames.map(name => ({ name, tests: generateTests(level, name) }))
+}));
 
 // ==================================
 // Page rendering
 // ==================================
 const app = document.getElementById("app");
 
+function breadcrumb(html) {
+  const div = document.createElement("div");
+  div.className = "breadcrumb";
+  div.innerHTML = html;
+  app.appendChild(div);
+}
+
 // Show levels
 function showLevels() {
   app.innerHTML = "<h2>Select your level</h2>";
-  DATA.forEach(lvl => {
-    let btn = document.createElement("button");
+  Object.values(DATA).forEach(lvl => {
+    const btn = document.createElement("button");
     btn.textContent = lvl.level;
     btn.onclick = () => showTopics(lvl);
     app.appendChild(btn);
@@ -98,8 +124,9 @@ function showLevels() {
 // Show topics
 function showTopics(levelObj) {
   app.innerHTML = `<h2>${levelObj.level} Topics</h2>`;
+  breadcrumb(`<span>${levelObj.level}</span>`);
   levelObj.topics.forEach(topic => {
-    let btn = document.createElement("button");
+    const btn = document.createElement("button");
     btn.textContent = topic.name;
     btn.onclick = () => showTests(topic, levelObj.level);
     app.appendChild(btn);
@@ -107,23 +134,49 @@ function showTopics(levelObj) {
   backButton(showLevels);
 }
 
-// Show tests
+// Show tests (grouped by type)
 function showTests(topic, levelName) {
   app.innerHTML = `<h2>${levelName} · ${topic.name}</h2>`;
-  topic.tests.forEach(test => {
-    let btn = document.createElement("button");
-    btn.textContent = test.title;
-    btn.onclick = () => showQuiz(test);
-    app.appendChild(btn);
+  breadcrumb(`<span>${levelName}</span> › <span>${topic.name}</span>`);
+
+  const groups = [
+    { label: "Mini Tests", type: "mini" },
+    { label: "Short Tests", type: "short" },
+    { label: "Full Tests", type: "full" }
+  ];
+
+  groups.forEach(group => {
+    const list = topic.tests.filter(t => t.type === group.type);
+    if (!list.length) return;
+
+    const section = document.createElement("section");
+    section.className = "group";
+    section.innerHTML = `<h3>${group.label}</h3>`;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    list.forEach(test => {
+      const btn = document.createElement("button");
+      btn.className = "test-card";
+      btn.textContent = test.title;
+      btn.onclick = () => showQuiz(test, topic, levelName);
+      grid.appendChild(btn);
+    });
+
+    section.appendChild(grid);
+    app.appendChild(section);
   });
+
   backButton(() => showTopics(DATA.find(l => l.level === levelName)));
 }
 
 // Show quiz
-function showQuiz(test) {
+function showQuiz(test, topic, levelName) {
   app.innerHTML = `
     <div class="quiz">
       <h2>${test.title}</h2>
+      <div class="breadcrumb">${levelName} › ${topic.name} › ${test.title}</div>
       <p>${test.bigPrompt}</p>
       <audio controls src="${test.audio}"></audio>
       ${test.image ? `<img src="${test.image}" alt="quiz image">` : ""}
@@ -143,27 +196,5 @@ function showQuiz(test) {
     e.preventDefault();
     let score = 0;
     test.fields.forEach(f => {
-      let userAns = form[f.key].value.trim().toLowerCase();
-      if (f.answers.map(a=>a.toLowerCase()).includes(userAns)) score++;
-    });
-    document.getElementById("result").innerHTML =
-      `You got <b>${score}/${test.fields.length}</b> correct!`;
-  };
-  backButton(() => showTests(
-    DATA.find(l => l.level === test.level)
-      .topics.find(t => t.tests.includes(test)),
-    test.level
-  ));
-}
-
-// Back button helper
-function backButton(fn) {
-  let btn = document.createElement("button");
-  btn.textContent = "⬅ Back";
-  btn.onclick = fn;
-  app.appendChild(btn);
-}
-
-// Start
-showLevels();
-
+      const userAns = (form[f.key].value || "").trim().toLowerCase();
+      const accepted = (f.answers || []).map
