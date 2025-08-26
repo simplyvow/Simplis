@@ -167,16 +167,40 @@ function showTests(levelName, topic) {
 }
 
 function showTestPage(levelName, topic, test) {
-  app.innerHTML = `<h1>${test.title}</h1>`;
+  app.innerHTML = ""; // clear
+
+  let title = document.createElement("h1");
+  title.textContent = test.title;
+  app.appendChild(title);
+
   if (test.audio) {
-    app.innerHTML += `<audio controls src="${test.audio}"></audio>`;
+    let audio = document.createElement("audio");
+    audio.controls = true;
+    audio.src = test.audio;
+    app.appendChild(audio);
   }
+
   if (test.image) {
-    app.innerHTML += `<img src="${test.image}" style="max-width:300px;display:block;margin:1em auto;">`;
+    let img = document.createElement("img");
+    img.src = test.image;
+    img.style.maxWidth = "300px";
+    img.style.display = "block";
+    img.style.margin = "1em auto";
+    app.appendChild(img);
   }
-  app.innerHTML += `<p>${test.bigPrompt}</p>`;
+
+  let prompt = document.createElement("p");
+  prompt.textContent = test.bigPrompt;
+  app.appendChild(prompt);
+
   test.fields.forEach(f => {
-    app.innerHTML += `<label>${f.label}: <input type="text"></label><br>`;
+    let label = document.createElement("label");
+    label.textContent = f.label + ": ";
+    let input = document.createElement("input");
+    input.type = "text";
+    label.appendChild(input);
+    app.appendChild(label);
+    app.appendChild(document.createElement("br"));
   });
 
   let back = document.createElement("button");
