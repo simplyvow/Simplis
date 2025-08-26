@@ -162,32 +162,6 @@ function showTests(levelName, topic) {
   app.appendChild(back);
 }
 
-  if (groups.short.length) {
-    app.innerHTML += "<h2>Short Tests</h2>";
-    groups.short.forEach(test => {
-      let btn = document.createElement("button");
-      btn.textContent = test.title;
-      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
-      app.appendChild(btn);
-    });
-  }
-
-  if (groups.full.length) {
-    app.innerHTML += "<h2>Full Tests</h2>";
-    groups.full.forEach(test => {
-      let btn = document.createElement("button");
-      btn.textContent = test.title;
-      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
-      app.appendChild(btn);
-    });
-  }
-
-  let back = document.createElement("button");
-  back.textContent = "⬅ Back";
-  back.onclick = () => showTopics(DATA.find(l=>l.level===levelName));
-  app.appendChild(back);
-}
-
 function showTestPage(levelName, topic, test) {
   app.innerHTML = `<h1>${test.title}</h1>`;
   if (test.audio) {
@@ -209,5 +183,3 @@ function showTestPage(levelName, topic, test) {
 
 // ===== START APP =====
 showLevels();
-
-
