@@ -141,7 +141,7 @@ function showTests(levelName, topic) {
     groups.mini.forEach(test => {
       let btn = document.createElement("button");
       btn.textContent = test.title;
-      btn.onclick = () => showTestPage(levelName, topic, test);
+      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
       app.appendChild(btn);
     });
   }
@@ -151,7 +151,7 @@ function showTests(levelName, topic) {
     groups.short.forEach(test => {
       let btn = document.createElement("button");
       btn.textContent = test.title;
-      btn.onclick = () => showTestPage(levelName, topic, test);
+      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
       app.appendChild(btn);
     });
   }
@@ -161,7 +161,7 @@ function showTests(levelName, topic) {
     groups.full.forEach(test => {
       let btn = document.createElement("button");
       btn.textContent = test.title;
-      btn.onclick = () => showTestPage(levelName, topic, test);
+      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
       app.appendChild(btn);
     });
   }
@@ -193,3 +193,4 @@ function showTestPage(levelName, topic, test) {
 
 // ===== START APP =====
 showLevels();
+
