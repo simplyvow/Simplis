@@ -132,19 +132,35 @@ function showTopics(level) {
 function showTests(levelName, topic) {
   app.innerHTML = `<h1>${levelName} – ${topic.name}</h1>`;
 
-  // Group tests
-  const groups = { mini: [], short: [], full: [] };
-  topic.tests.forEach(t => groups[t.type].push(t));
+  // Group tests dynamically (so no type is skipped)
+  const groups = {};
+  topic.tests.forEach(t => {
+    if (!groups[t.type]) groups[t.type] = [];
+    groups[t.type].push(t);
+  });
 
-  if (groups.mini.length) {
-    app.innerHTML += "<h2>Mini Tests</h2>";
-    groups.mini.forEach(test => {
+  // Render each group automatically
+  Object.keys(groups).forEach(type => {
+    let title = "";
+    if (type === "mini") title = "Mini Tests";
+    if (type === "short") title = "Short Tests";
+    if (type === "full") title = "Full Tests";
+
+    app.innerHTML += `<h2>${title}</h2>`;
+    groups[type].forEach(test => {
       let btn = document.createElement("button");
       btn.textContent = test.title;
-      btn.addEventListener("click", () => showTestPage(levelName, topic, test));;
+      btn.onclick = () => showTestPage(levelName, topic, test);
       app.appendChild(btn);
     });
-  }
+  });
+
+  // Back button
+  let back = document.createElement("button");
+  back.textContent = "⬅ Back";
+  back.onclick = () => showTopics(DATA.find(l=>l.level===levelName));
+  app.appendChild(back);
+}
 
   if (groups.short.length) {
     app.innerHTML += "<h2>Short Tests</h2>";
@@ -193,4 +209,5 @@ function showTestPage(levelName, topic, test) {
 
 // ===== START APP =====
 showLevels();
+
 
