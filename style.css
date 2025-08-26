@@ -1,55 +1,55 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0; padding: 0;
-  background: #f4f4f9;
-  color: #333;
-}
 
-header {
-  background: #4a90e2;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-}
 
-main {
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
+.test-card {
+margin: 0;
+width: 100%;
+text-align: left;
+background: white;
+color: #222;
+border: 1px solid #e6e6ef;
+box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
+.test-card:hover { background: #f7faff; }
 
-button {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 20px;
-  background: #4a90e2;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #357ab7;
-}
 
 .quiz {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-  margin-top: 20px;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+margin-top: 20px;
 }
+
 
 .quiz img {
-  max-width: 200px;
-  display: block;
-  margin: 10px 0;
+max-width: 240px;
+display: block;
+margin: 10px 0;
+border-radius: 8px;
 }
 
+
 input[type="text"] {
-  width: 100%;
-  padding: 5px;
-  margin: 8px 0;
+width: 100%;
+padding: 8px;
+margin: 8px 0 14px;
+border: 1px solid #ccc;
+border-radius: 6px;
+}
+
+
+.no-audio {
+padding: 10px;
+margin: 8px 0 12px;
+background: #fff7d4;
+border: 1px solid #ffec99;
+border-radius: 8px;
+}
+
+
+.breadcrumb {
+margin-bottom: 8px;
+font-size: .95rem;
+color: #555;
 }
